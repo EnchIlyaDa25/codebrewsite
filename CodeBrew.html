@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevCoffee ☕</title>
+    <style>
+        :root {
+            --vscode-bg: #1e1e1e;
+            --vscode-sidebar: #252526;
+            --vscode-text: #d4d4d4;
+            --vscode-blue: #569cd6;
+            --vscode-green: #00ffaa;
+            --vscode-purple: #c586c0;
+            --vscode-orange: #ce9178;
+            --vscode-error: #f44747;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+        
+        body {
+            background: var(--vscode-bg);
+            color: var(--vscode-text);
+            line-height: 1.6;
+        }
+        
+        /* Анимация мигающего курсора */
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        
+        .cursor {
+            display: inline-block;
+            width: 10px;
+            height: 1.2rem;
+            background: var(--vscode-green);
+            vertical-align: middle;
+            margin-left: 2px;
+            animation: blink 1s infinite;
+        }
+        
+        /* Терминальная шапка */
+        header {
+            background: var(--vscode-sidebar);
+            padding: 1rem 0;
+            border-bottom: 1px solid #333;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        nav a {
+            color: var(--vscode-text);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+        
+        nav a:hover {
+            background: #2d2d2d;
+            color: var(--vscode-blue);
+        }
+        
+        /* Секции как "панели кода" */
+        section {
+            padding: 4rem 0;
+            min-height: 100vh;
+            scroll-margin-top: 70px;
+            border-bottom: 1px dashed #333;
+        }
+        
+        h1, h2 {
+            color: var(--vscode-blue);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        h2::before {
+            content: "// ";
+            color: var(--vscode-green);
+        }
+        
+        /* Главный экран (Hero) с анимацией печатающегося текста */
+        .hero {
+            background: linear-gradient(rgba(30, 30, 30, 0.9), rgba(30, 30, 30, 0.9)), 
+                        url('https://images.unsplash.com/photo-1551033406-611cf9a28f67') center/cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            white-space: nowrap;
+            border-right: 3px solid var(--vscode-green);
+            animation: typing 3s steps(30, end), blink-caret 0.75s step-end infinite;
+        }
+        
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
+            50% { border-color: var(--vscode-green); }
+        }
+        
+        .hero p {
+            color: var(--vscode-purple);
+            font-size: 1.2rem;
+        }
+        
+        /* Меню в стиле JSON */
+        .menu-item {
+            background: var(--vscode-sidebar);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-left: 3px solid var(--vscode-green);
+            transition: transform 0.3s;
+        }
+        
+        .menu-item:hover {
+            transform: translateX(10px);
+        }
+        
+        .menu-item h3 {
+            color: var(--vscode-orange);
+            margin-bottom: 0.5rem;
+        }
+        
+        .menu-item p {
+            color: var(--vscode-text);
+        }
+        
+        .menu-item .price {
+            color: var(--vscode-green);
+            font-weight: bold;
+        }
+        
+        /* Галерея с анимацией появления */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+        
+        .gallery img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border: 1px solid #333;
+            transition: all 0.3s;
+            opacity: 0;
+            animation: fadeIn 1s forwards;
+            animation-delay: calc(var(--delay) * 0.2s);
+        }
+        
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+        
+        .gallery img:hover {
+            transform: scale(1.03);
+            border-color: var(--vscode-blue);
+        }
+        
+        /* Акции с пульсацией */
+        .promo-item {
+            background: #2d2d2d;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-left: 3px solid var(--vscode-error);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(244, 71, 71, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(244, 71, 71, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(244, 71, 71, 0); }
+        }
+        
+        .promo-item h3 {
+            color: var(--vscode-error);
+        }
+        
+        /* Кнопка "Run" с анимацией */
+        .btn {
+            display: inline-block;
+            background: var(--vscode-green);
+            color: #1e1e1e;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn:hover {
+            background: #00cc88;
+            transform: translateY(-3px);
+        }
+        
+        .btn::after {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                rgba(255, 255, 255, 0) 45%,
+                rgba(255, 255, 255, 0.3) 50%,
+                rgba(255, 255, 255, 0) 55%
+            );
+            transform: rotate(30deg);
+            animation: shine 3s infinite;
+        }
+        
+        @keyframes shine {
+            to {
+                left: 150%;
+                top: 150%;
+            }
+        }
+        
+        /* Футер как статус-бар */
+        footer {
+            background: var(--vscode-sidebar);
+            padding: 1rem 0;
+            text-align: center;
+            border-top: 1px solid #333;
+        }
+        
+        footer p::before {
+            content: "> ";
+            color: var(--vscode-green);
+        }
+        
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+                gap: 0.5rem;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+        }
+    /* Адаптивное меню для мобилок */
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+                gap: 0;
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.3s ease-out;
+                background: var(--vscode-sidebar);
+                width: 100%;
+                position: absolute;
+                left: 0;
+                top: 60px;
+            }
+
+            nav ul.active {
+                max-height: 500px;
+                padding: 1rem 0;
+                border-bottom: 1px solid #333;
+            }
+
+            nav a {
+                display: block;
+                width: 100%;
+                text-align: center;
+                padding: 0.8rem;
+            }
+
+            /* Бургер-иконка */
+            .burger {
+                display: block;
+                cursor: pointer;
+                padding: 1rem;
+                position: absolute;
+                right: 0;
+                top: 0;
+            }
+
+            .burger span {
+                display: block;
+                width: 25px;
+                height: 3px;
+                background: var(--vscode-text);
+                margin: 5px 0;
+                transition: all 0.3s;
+            }
+
+            .burger.active span:nth-child(1) {
+                transform: rotate(45deg) translate(5px, 5px);
+            }
+
+            .burger.active span:nth-child(2) {
+                opacity: 0;
+            }
+
+            .burger.active span:nth-child(3) {
+                transform: rotate(-45deg) translate(5px, -5px);
+            }
+
+            /* Футер для мобилок */
+            footer {
+                padding: 1.5rem 1rem;
+            }
+
+            footer p {
+                font-size: 0.9rem;
+                line-height: 1.4;
+                max-width: 90%;
+                margin: 0 auto;
+            }
+
+            /* Уменьшаем отступы секций */
+            section {
+                padding: 2.5rem 0;
+                min-height: auto;
+            }
+        }
+
+        /* Десктопные стили */
+        @media (min-width: 769px) {
+            .burger {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#home">home()<span class="cursor"></span></a></li>
+                    <li><a href="#menu">menu.json</a></li>
+                    <li><a href="#gallery">gallery.css</a></li>
+                    <li><a href="#about">about.md</a></li>
+                    <li><a href="#promo">promo.js</a></li>
+                    <li><a href="#contacts">contacts.txt</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section id="home" class="hero">
+        <div class="container">
+            <h1>DevCoffee ☕</h1>
+            <p>// Кофе, код и кексы</p>
+            <button class="btn">Запустить кофе-скрипт (Run)</button>
+        </div>
+    </section>
+
+    <section id="menu" class="container">
+        <h2>Меню</h2>
+        <div class="menu-item">
+            <h3>"Эспрессо": {</h3>
+            <p>"Описание": "Черный как void*",</p>
+            <p class="price">"Цена": 150₽</p>
+        </div>
+        <div class="menu-item">
+            <h3>"Капучино": {</h3>
+            <p>"Описание": "С молоком, как хороший код",</p>
+            <p class="price">"Цена": 180₽</p>
+        </div>
+    </section>
+
+    <section id="gallery" class="container">
+        <h2>Галерея</h2>
+        <div class="gallery">
+            <img src="https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5" alt="Кофе и ноутбук" style="--delay: 1">
+            <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0" alt="Рабочее место" style="--delay: 2">
+            <img src="https://images.unsplash.com/photo-1551033406-611cf9a28f67" alt="Десерты" style="--delay: 3">
+        </div>
+    </section>
+
+    <section id="about" class="container">
+        <h2>О нас</h2>
+        <p>/* 
+            Мы — кофейня для разработчиков. Здесь есть: 
+            - Быстрый Wi-Fi 
+            - Розетки у каждого стола 
+            - Тихие зоны для глубокой работы 
+        */</p>
+    </section>
+
+    <section id="promo" class="container">
+        <h2>Акции</h2>
+        <div class="promo-item">
+            <h3>Баг дня!</h3>
+            <p>Случайный напиток со скидкой 50% (обновите страницу для выбора).</p>
+        </div>
+    </section>
+
+    <section id="contacts" class="container">
+        <h2>Контакты</h2>
+        <div class="contacts">
+            <p>// Адрес: ул. Кодовая, 42</p>
+            <p>// Телефон: +7 (495) 123-45-67</p>
+            <p>// Часы работы: 8:00 – 23:59 (как дедлайн)</p>
+        </div>
+    </section>
+
+     <footer>
+        <div class="container">
+            <p>DevCoffee © 2023 | Скомпилировано с любовью | Все права защищены</p>
+        </div>
+    </footer>
+
+    <script>
+        // Бургер-меню
+        const burger = document.querySelector('.burger');
+        const nav = document.querySelector('nav ul');
+
+        burger.addEventListener('click', () => {
+            burger.classList.toggle('active');
+            nav.classList.toggle('active');
+        });
+
+        // Закрытие меню при клике на пункт
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    burger.classList.remove('active');
+                    nav.classList.remove('active');
+                }
+            });
+        });
+        // Плавный скролл
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // "Баг дня" – рандомный напиток
+        const bugOfTheDay = () => {
+            const drinks = ["Эспрессо", "Капучино", "Латте", "Раф", "Американо"];
+            const randomDrink = drinks[Math.floor(Math.random() * drinks.length)];
+            document.querySelector('.promo-item h3').textContent = 
+                `Баг дня! ${randomDrink} за полцены!`;
+        };
+        
+        bugOfTheDay();
+
+        // Эффект печатающегося текста для всех секций
+        const sections = document.querySelectorAll('section');
+        sections.forEach((section, index) => {
+            section.style.opacity = '0';
+            section.style.animation = `fadeIn 1s forwards ${index * 0.3}s`;
+        });
+    </script>
+</body>
+</html>
